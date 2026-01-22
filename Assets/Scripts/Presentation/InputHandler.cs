@@ -11,17 +11,25 @@ namespace EntropyCheckers.Presentation
         private GameManager gameManager;
         private BoardRenderer boardRenderer;
         private PieceRenderer pieceRenderer;
+        private GameUI gameUI;
         private Camera mainCamera;
 
         private Piece selectedPiece;
         private List<Move> currentLegalMoves;
         private Dictionary<Vector2Int, Move> movesByDestination;
+        
+        // Forced capture auto-execution
+        private bool pendingForcedCapture;
+        private float forcedCaptureDelay;
+        private Move forcedMove;
+        private const float ForcedCaptureWaitTime = 1.2f;
 
-        public void Initialize(GameManager gameManager, BoardRenderer boardRenderer, PieceRenderer pieceRenderer)
+        public void Initialize(GameManager gameManager, BoardRenderer boardRenderer, PieceRenderer pieceRenderer, GameUI gameUI = null)
         {
             this.gameManager = gameManager;
             this.boardRenderer = boardRenderer;
             this.pieceRenderer = pieceRenderer;
+            this.gameUI = gameUI;
             this.mainCamera = Camera.main;
 
             currentLegalMoves = new List<Move>();
@@ -30,6 +38,11 @@ namespace EntropyCheckers.Presentation
             gameManager.OnTurnChanged += HandleTurnChanged;
             gameManager.OnMoveExecuted += HandleMoveExecuted;
             gameManager.OnGameOver += HandleGameOver;
+        }
+        
+        public void SetGameUI(GameUI ui)
+        {
+            this.gameUI = ui;
         }
 
         private void OnDestroy()
@@ -44,6 +57,17 @@ namespace EntropyCheckers.Presentation
 
         private void Update()
         {
+            // Handle pending forced capture
+            if (pendingForcedCapture)
+            {
+                forcedCaptureDelay -= Time.deltaTime;
+                if (forcedCaptureDelay <= 0)
+                {
+                    ExecuteForcedCapture();
+                }
+                return; // Don't allow input during forced capture
+            }
+            
             var mouse = Mouse.current;
             if (mouse == null) return;
 
@@ -187,6 +211,67 @@ namespace EntropyCheckers.Presentation
             if (turnsUntilShrink <= 2)
             {
                 Debug.Log($"Warning: Board shrinks in {turnsUntilShrink} turn(s)!");
+            }
+            
+            // Check for forced capture on human's turn
+            if (gameManager.IsHumanTurn())
+            {
+                CheckForForcedCapture();
+            }
+        }
+        
+        private void CheckForForcedCapture()
+        {
+            var legalMoves = gameManager.GetLegalMoves();
+            
+            // If there's exactly one legal move and it's a capture, it's forced
+            if (legalMoves.Count == 1 && legalMoves[0].IsCapture)
+            {
+                TriggerForcedCapture(legalMoves[0]);
+            }
+            // Also check if ALL moves are captures (meaning player must capture, even if choice exists)
+            else if (legalMoves.Count > 0 && legalMoves.TrueForAll(m => m.IsCapture))
+            {
+                // Multiple capture options - highlight and notify but don't auto-execute
+                if (gameUI != null)
+                {
+                    gameUI.ShowForcedCaptureNotification();
+                }
+                // Auto-select a piece that can capture to help the player
+                SelectPiece(legalMoves[0].Piece);
+            }
+        }
+        
+        private void TriggerForcedCapture(Move move)
+        {
+            forcedMove = move;
+            pendingForcedCapture = true;
+            forcedCaptureDelay = ForcedCaptureWaitTime;
+            
+            // Show notification
+            if (gameUI != null)
+            {
+                gameUI.ShowForcedCaptureNotification();
+            }
+            
+            // Highlight the forced move
+            boardRenderer.HighlightTile(move.Piece.Position, HighlightType.Selected);
+            boardRenderer.HighlightTile(move.To, HighlightType.CaptureMove);
+            
+            Debug.Log($"Forced capture: {move}");
+        }
+        
+        private void ExecuteForcedCapture()
+        {
+            pendingForcedCapture = false;
+            
+            if (forcedMove != null)
+            {
+                // Animate and execute
+                pieceRenderer.MovePiece(forcedMove.Piece, forcedMove.To, true);
+                ClearSelection();
+                gameManager.SubmitMove(forcedMove);
+                forcedMove = null;
             }
         }
 

@@ -19,7 +19,13 @@ namespace EntropyCheckers.Presentation
         private GUIStyle warningStyle;
         private GUIStyle gameOverStyle;
         private GUIStyle buttonStyle;
+        private GUIStyle forcedCaptureStyle;
         private bool stylesInitialized;
+        
+        // Forced capture notification
+        private bool showForcedCapture;
+        private float forcedCaptureTimer;
+        private const float ForcedCaptureDisplayTime = 1.5f;
 
         public void Initialize(GameManager gameManager)
         {
@@ -64,7 +70,27 @@ namespace EntropyCheckers.Presentation
                 fontStyle = FontStyle.Bold
             };
 
+            forcedCaptureStyle = new GUIStyle(GUI.skin.label)
+            {
+                fontSize = 32,
+                fontStyle = FontStyle.Bold,
+                alignment = TextAnchor.MiddleCenter,
+                normal = { textColor = new Color(1f, 0.8f, 0.2f) }
+            };
+
             stylesInitialized = true;
+        }
+
+        private void Update()
+        {
+            if (showForcedCapture)
+            {
+                forcedCaptureTimer -= Time.deltaTime;
+                if (forcedCaptureTimer <= 0)
+                {
+                    showForcedCapture = false;
+                }
+            }
         }
 
         private void OnGUI()
@@ -76,10 +102,35 @@ namespace EntropyCheckers.Presentation
             DrawTopPanel();
             DrawBottomPanel();
 
+            if (showForcedCapture)
+            {
+                DrawForcedCaptureNotification();
+            }
+
             if (gameManager.State == GameState.GameOver)
             {
                 DrawGameOverScreen();
             }
+        }
+        
+        private void DrawForcedCaptureNotification()
+        {
+            float alpha = Mathf.PingPong(Time.time * 3f, 1f) * 0.5f + 0.5f;
+            
+            GUI.color = new Color(0, 0, 0, 0.6f * alpha);
+            float boxWidth = 350;
+            float boxHeight = 60;
+            GUI.DrawTexture(new Rect((Screen.width - boxWidth) / 2, Screen.height / 2 - 80, boxWidth, boxHeight), Texture2D.whiteTexture);
+            GUI.color = Color.white;
+            
+            forcedCaptureStyle.normal.textColor = new Color(1f, 0.8f, 0.2f, alpha);
+            GUI.Label(new Rect(0, Screen.height / 2 - 80, Screen.width, 60), "FORCED CAPTURE!", forcedCaptureStyle);
+        }
+        
+        public void ShowForcedCaptureNotification()
+        {
+            showForcedCapture = true;
+            forcedCaptureTimer = ForcedCaptureDisplayTime;
         }
 
         private void DrawTopPanel()

@@ -89,8 +89,8 @@ namespace EntropyCheckers.Presentation
                     }
                     tileRenderers[x, y] = renderer;
                     
-                    bool isDark = (x + y) % 2 == 1;
-                    renderer.color = isDark ? darkTileColor : lightTileColor;
+                    bool isPlayable = (x + y) % 2 == 1; // Playable squares are dark
+                    renderer.color = isPlayable ? darkTileColor : lightTileColor;
                     renderer.sortingOrder = 0;
                     
                     GameObject highlightObj = new GameObject($"Highlight_{x}_{y}");

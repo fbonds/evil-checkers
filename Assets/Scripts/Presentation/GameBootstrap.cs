@@ -99,8 +99,8 @@ namespace EntropyCheckers.Presentation
             gameManager.StartGame();
             
             pieceRenderer.Initialize(gameManager.Board, boardRenderer);
-            inputHandler.Initialize(gameManager, boardRenderer, pieceRenderer);
             gameUI.Initialize(gameManager);
+            inputHandler.Initialize(gameManager, boardRenderer, pieceRenderer, gameUI);
             promotionDialog.Initialize(gameManager, pieceRenderer);
             aiPlayer.Initialize(gameManager, pieceRenderer);
             aiPlayer.CurrentDifficulty = aiDifficulty;
