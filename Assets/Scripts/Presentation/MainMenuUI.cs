@@ -10,6 +10,7 @@ namespace EntropyCheckers.Presentation
         [SerializeField] private bool showMenuOnStart = true;
         
         private bool isMenuVisible;
+        private bool initialized;
         private GameBootstrap gameBootstrap;
         private Difficulty selectedDifficulty = Difficulty.Medium;
 
@@ -23,6 +24,7 @@ namespace EntropyCheckers.Presentation
         private void Start()
         {
             gameBootstrap = FindObjectOfType<GameBootstrap>();
+            initialized = true;
             
             if (showMenuOnStart)
             {
@@ -102,7 +104,7 @@ namespace EntropyCheckers.Presentation
 
         private void OnGUI()
         {
-            if (!isMenuVisible) return;
+            if (!isMenuVisible || !initialized) return;
 
             InitializeStyles();
 
@@ -111,8 +113,8 @@ namespace EntropyCheckers.Presentation
             GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), Texture2D.whiteTexture);
             GUI.color = Color.white;
 
-            float panelWidth = 500;
-            float panelHeight = 600;
+            float panelWidth = 450;
+            float panelHeight = Mathf.Min(550, Screen.height - 40);
             float panelX = (Screen.width - panelWidth) / 2;
             float panelY = (Screen.height - panelHeight) / 2;
 
@@ -120,24 +122,24 @@ namespace EntropyCheckers.Presentation
             GUILayout.BeginVertical();
 
             // Title
-            GUILayout.Space(20);
+            GUILayout.Space(10);
             GUILayout.Label("ENTROPY CHECKERS", titleStyle);
             GUILayout.Label("The board is not your friend.", subtitleStyle);
-            GUILayout.Space(40);
+            GUILayout.Space(20);
 
             // Difficulty selection
             GUILayout.Label("SELECT DIFFICULTY", new GUIStyle(subtitleStyle) { fontStyle = FontStyle.Bold });
+            GUILayout.Space(10);
+
+            DrawDifficultyButton(Difficulty.Easy, "EASY", "AI often makes mistakes");
+            GUILayout.Space(5);
+            DrawDifficultyButton(Difficulty.Medium, "MEDIUM", "AI plays reasonably well");
+            GUILayout.Space(5);
+            DrawDifficultyButton(Difficulty.Hard, "HARD", "AI plays strategically");
+            GUILayout.Space(5);
+            DrawDifficultyButton(Difficulty.Master, "MASTER", "AI plays optimally");
+
             GUILayout.Space(20);
-
-            DrawDifficultyButton(Difficulty.Easy, "EASY", "AI often makes mistakes (30% optimal)");
-            GUILayout.Space(10);
-            DrawDifficultyButton(Difficulty.Medium, "MEDIUM", "AI plays reasonably well (60% optimal)");
-            GUILayout.Space(10);
-            DrawDifficultyButton(Difficulty.Hard, "HARD", "AI plays strategically (85% optimal)");
-            GUILayout.Space(10);
-            DrawDifficultyButton(Difficulty.Master, "MASTER", "AI plays optimally (100% optimal)");
-
-            GUILayout.Space(40);
 
             // Start/Resume button
             GUI.backgroundColor = new Color(0.3f, 0.7f, 0.3f);
@@ -179,12 +181,12 @@ namespace EntropyCheckers.Presentation
 
             GUI.backgroundColor = Color.white;
 
-            GUILayout.Space(30);
+            GUILayout.FlexibleSpace();
 
             // Controls info
-            GUILayout.Label("CONTROLS", new GUIStyle(subtitleStyle) { fontStyle = FontStyle.Bold });
-            GUILayout.Label("Left Click: Select piece / Move\nRight Click: Deselect\nEscape: Open menu", descriptionStyle);
+            GUILayout.Label("Left Click: Select/Move | Right Click: Deselect | Escape: Menu", descriptionStyle);
 
+            GUILayout.Space(10);
             GUILayout.EndVertical();
             GUILayout.EndArea();
         }
