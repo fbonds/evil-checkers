@@ -44,19 +44,10 @@ namespace EntropyCheckers.Presentation
 
         private void Update()
         {
-            if (gameManager == null || gameManager.State != GameState.WaitingForMove)
-            {
-                return;
-            }
-
-            if (!gameManager.IsHumanTurn())
-            {
-                return;
-            }
-
             var mouse = Mouse.current;
             if (mouse == null) return;
 
+            // Always allow clicks for debugging - check state inside HandleClick
             if (mouse.leftButton.wasPressedThisFrame)
             {
                 HandleClick();
@@ -72,6 +63,20 @@ namespace EntropyCheckers.Presentation
         {
             Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             Vector2Int boardPos = boardRenderer.WorldToBoard(mouseWorldPos);
+
+            Debug.Log($"Click at board position: {boardPos}, GameState: {gameManager?.State}, CurrentPlayer: {gameManager?.CurrentPlayer}");
+
+            if (gameManager == null || gameManager.State != GameState.WaitingForMove)
+            {
+                Debug.Log("Cannot interact - game not in WaitingForMove state");
+                return;
+            }
+
+            if (!gameManager.IsHumanTurn())
+            {
+                Debug.Log("Cannot interact - not human's turn");
+                return;
+            }
 
             if (!IsValidBoardPosition(boardPos)) return;
 
