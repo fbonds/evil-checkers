@@ -214,12 +214,6 @@ namespace EntropyCheckers.Presentation
             ClearSelection();
             Debug.Log($"Turn changed to {newPlayer}. Turn {gameManager.TurnCount}");
             
-            int turnsUntilShrink = gameManager.TurnsUntilShrink();
-            if (turnsUntilShrink <= 2)
-            {
-                Debug.Log($"Warning: Board shrinks in {turnsUntilShrink} turn(s)!");
-            }
-            
             // Check for forced capture on human's turn
             if (gameManager.IsHumanTurn())
             {

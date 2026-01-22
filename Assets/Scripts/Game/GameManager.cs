@@ -193,16 +193,7 @@ namespace EntropyCheckers.Game
             // Increment turn counter
             TurnCount++;
 
-            // Check for board shrink
-            if (TurnCount > 0 && TurnCount % TurnsPerShrink == 0)
-            {
-                Board.ShrinkBoard();
-                Debug.Log($"Board shrunk! Ring {Board.CurrentShrinkRing} is now hazardous.");
-            }
-            else if (TurnCount > 0 && TurnCount % TurnsPerShrink == TurnsPerShrink - 1)
-            {
-                OnBoardShrinkWarning?.Invoke();
-            }
+
 
             // Switch player
             CurrentPlayer = CurrentPlayer == Player.Black ? Player.Red : Player.Black;

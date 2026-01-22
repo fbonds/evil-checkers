@@ -156,24 +156,6 @@ namespace EntropyCheckers.Presentation
             int redCount = gameManager.Board.CountPieces(Player.Red);
             GUILayout.Label($"Black: {blackCount}  |  Red: {redCount}", labelStyle);
 
-            // Board shrink warning
-            int turnsUntilShrink = gameManager.TurnsUntilShrink();
-            if (turnsUntilShrink <= 2)
-            {
-                warningStyle.normal.textColor = turnsUntilShrink == 1 ? dangerColor : warningColor;
-                GUILayout.Label($"BOARD SHRINKS IN {turnsUntilShrink} TURN(S)!", warningStyle);
-            }
-            else
-            {
-                GUILayout.Label($"Shrink in: {turnsUntilShrink} turns", labelStyle);
-            }
-
-            // Current shrink ring
-            if (gameManager.Board.CurrentShrinkRing >= 0)
-            {
-                GUILayout.Label($"Ring {gameManager.Board.CurrentShrinkRing} is hazardous", warningStyle);
-            }
-
             GUILayout.EndVertical();
             GUILayout.EndArea();
         }

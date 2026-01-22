@@ -132,16 +132,6 @@ namespace EntropyCheckers.Presentation
             }
         }
 
-        [ContextMenu("Test Board Shrink")]
-        public void TestBoardShrink()
-        {
-            if (gameManager != null)
-            {
-                gameManager.Board.ShrinkBoard();
-                Debug.Log($"Board shrunk to ring level: {gameManager.Board.CurrentShrinkRing}");
-            }
-        }
-
         [ContextMenu("Reset Game")]
         public void ResetGame()
         {
