@@ -9,7 +9,7 @@ namespace EntropyCheckers.Presentation
     public class PromotionDialogUI : MonoBehaviour
     {
         [Header("Dialog Settings")]
-        [SerializeField] private Vector2 dialogSize = new Vector2(400, 300);
+        [SerializeField] private Vector2 dialogSize = new Vector2(400, 420);
         [SerializeField] private Color backgroundColor = new Color(0.1f, 0.1f, 0.15f, 0.95f);
         [SerializeField] private Color buttonColor = new Color(0.3f, 0.3f, 0.4f);
         [SerializeField] private Color buttonHoverColor = new Color(0.4f, 0.4f, 0.5f);
@@ -143,23 +143,23 @@ namespace EntropyCheckers.Presentation
         private void DrawPromotionChoice()
         {
             GUILayout.Label("PROMOTION", titleStyle);
-            GUILayout.Space(10);
+            GUILayout.Space(5);
             GUILayout.Label("Your piece has reached the King's Row.\nChoose your corruption:", descriptionStyle);
-            GUILayout.Space(20);
+            GUILayout.Space(15);
 
             // Wraith King button
             GUI.backgroundColor = wraithColor;
-            if (GUILayout.Button("\n WRAITH KING \n", buttonStyle, GUILayout.Height(60)))
+            if (GUILayout.Button("WRAITH KING", buttonStyle, GUILayout.Height(45)))
             {
                 gameManager.SubmitPromotion(PromotionChoice.WraithKing);
             }
             GUILayout.Label("Unlimited diagonal movement\nDies after 3 turns", descriptionStyle);
 
-            GUILayout.Space(20);
+            GUILayout.Space(15);
 
             // Corrupted King button
             GUI.backgroundColor = corruptedColor;
-            if (GUILayout.Button("\n CORRUPTED KING \n", buttonStyle, GUILayout.Height(60)))
+            if (GUILayout.Button("CORRUPTED KING", buttonStyle, GUILayout.Height(45)))
             {
                 if (defectorCandidates.Count > 0)
                 {
