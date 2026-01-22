@@ -117,7 +117,14 @@ namespace EntropyCheckers.Presentation
         {
             if (!gameManager.CanSelectPiece(piece))
             {
-                Debug.Log("Cannot select this piece - no legal moves available.");
+                // Debug: show why no moves
+                var allMoves = gameManager.GetLegalMoves();
+                Debug.Log($"Cannot select this piece at {piece.Position} - no legal moves available.");
+                Debug.Log($"Total legal moves for {gameManager.CurrentPlayer}: {allMoves.Count}");
+                foreach (var m in allMoves)
+                {
+                    Debug.Log($"  Available move: {m}");
+                }
                 return;
             }
 
