@@ -202,6 +202,13 @@ namespace EntropyCheckers.Presentation
             gameManager.SubmitMove(move);
         }
 
+        public void ResetState()
+        {
+            ClearSelection();
+            pendingForcedCapture = false;
+            forcedMove = null;
+        }
+
         private void HandleTurnChanged(Player newPlayer)
         {
             ClearSelection();

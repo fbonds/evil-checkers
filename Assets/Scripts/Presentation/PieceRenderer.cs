@@ -256,19 +256,27 @@ namespace EntropyCheckers.Presentation
 
         private System.Collections.IEnumerator AnimateMove(GameObject pieceObj, Vector3 targetPos)
         {
+            if (pieceObj == null) yield break;
+            
             Vector3 startPos = pieceObj.transform.position;
             float duration = 0.2f;
             float elapsed = 0f;
             
             while (elapsed < duration)
             {
+                // Check if object was destroyed during animation
+                if (pieceObj == null) yield break;
+                
                 elapsed += Time.deltaTime;
                 float t = Mathf.SmoothStep(0, 1, elapsed / duration);
                 pieceObj.transform.position = Vector3.Lerp(startPos, targetPos, t);
                 yield return null;
             }
             
-            pieceObj.transform.position = targetPos;
+            if (pieceObj != null)
+            {
+                pieceObj.transform.position = targetPos;
+            }
         }
 
         public void RefreshAllPieces()

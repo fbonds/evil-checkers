@@ -228,6 +228,18 @@ namespace EntropyCheckers.Presentation
             return position.x >= 0 && position.x < Board.Size &&
                    position.y >= 0 && position.y < Board.Size;
         }
+
+        public void RefreshAllTiles()
+        {
+            for (int x = 0; x < Board.Size; x++)
+            {
+                for (int y = 0; y < Board.Size; y++)
+                {
+                    UpdateTileVisual(x, y);
+                }
+            }
+            ClearAllHighlights();
+        }
     }
 
     public enum HighlightType

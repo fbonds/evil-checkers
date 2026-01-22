@@ -147,7 +147,14 @@ namespace EntropyCheckers.Presentation
         {
             if (gameManager != null)
             {
+                // Stop all coroutines to prevent animation errors
+                pieceRenderer.StopAllCoroutines();
+                
+                // Reset input state
+                inputHandler.ResetState();
+                
                 gameManager.StartGame();
+                boardRenderer.RefreshAllTiles();
                 pieceRenderer.RefreshAllPieces();
                 Debug.Log("Game reset!");
             }
