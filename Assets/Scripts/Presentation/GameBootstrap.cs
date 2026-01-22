@@ -1,5 +1,6 @@
 using UnityEngine;
 using EntropyCheckers.Core;
+using EntropyCheckers.Game;
 
 namespace EntropyCheckers.Presentation
 {
@@ -9,11 +10,16 @@ namespace EntropyCheckers.Presentation
         [SerializeField] private BoardRenderer boardRenderer;
         [SerializeField] private PieceRenderer pieceRenderer;
         
+        [Header("Input")]
+        [SerializeField] private InputHandler inputHandler;
+        
         [Header("Camera")]
         [SerializeField] private Camera mainCamera;
         [SerializeField] private float cameraZoom = 6f;
 
-        private Board board;
+        private GameManager gameManager;
+
+        public GameManager GameManager => gameManager;
 
         private void Awake()
         {
@@ -29,6 +35,12 @@ namespace EntropyCheckers.Presentation
                 pieceRenderer = pieceObj.AddComponent<PieceRenderer>();
             }
             
+            if (inputHandler == null)
+            {
+                var inputObj = new GameObject("InputHandler");
+                inputHandler = inputObj.AddComponent<InputHandler>();
+            }
+            
             if (mainCamera == null)
             {
                 mainCamera = Camera.main;
@@ -42,17 +54,20 @@ namespace EntropyCheckers.Presentation
 
         private void InitializeGame()
         {
-            board = new Board();
-            board.SetupInitialPieces();
+            gameManager = new GameManager();
             
-            boardRenderer.Initialize(board);
-            pieceRenderer.Initialize(board, boardRenderer);
+            boardRenderer.Initialize(gameManager.Board);
+            pieceRenderer.Initialize(gameManager.Board, boardRenderer);
+            inputHandler.Initialize(gameManager, boardRenderer, pieceRenderer);
             
             SetupCamera();
             
+            gameManager.StartGame();
+            
             Debug.Log("Entropy Checkers initialized!");
-            Debug.Log($"Black pieces: {board.CountPieces(Player.Black)}");
-            Debug.Log($"Red pieces: {board.CountPieces(Player.Red)}");
+            Debug.Log($"Black pieces: {gameManager.Board.CountPieces(Player.Black)}");
+            Debug.Log($"Red pieces: {gameManager.Board.CountPieces(Player.Red)}");
+            Debug.Log("Black (human) moves first. Click a piece to select, then click a destination.");
         }
 
         private void SetupCamera()
@@ -69,22 +84,35 @@ namespace EntropyCheckers.Presentation
         [ContextMenu("Test Board Shrink")]
         public void TestBoardShrink()
         {
-            if (board != null)
+            if (gameManager != null)
             {
-                board.ShrinkBoard();
-                Debug.Log($"Board shrunk to ring level: {board.CurrentShrinkRing}");
+                gameManager.Board.ShrinkBoard();
+                Debug.Log($"Board shrunk to ring level: {gameManager.Board.CurrentShrinkRing}");
             }
         }
 
         [ContextMenu("Reset Game")]
         public void ResetGame()
         {
-            if (board != null)
+            if (gameManager != null)
             {
-                board.Reset();
-                board.SetupInitialPieces();
+                gameManager.StartGame();
                 pieceRenderer.RefreshAllPieces();
                 Debug.Log("Game reset!");
+            }
+        }
+
+        [ContextMenu("Show Legal Moves")]
+        public void ShowLegalMoves()
+        {
+            if (gameManager != null)
+            {
+                var moves = gameManager.GetLegalMoves();
+                Debug.Log($"Legal moves for {gameManager.CurrentPlayer}: {moves.Count}");
+                foreach (var move in moves)
+                {
+                    Debug.Log($"  {move}");
+                }
             }
         }
     }
