@@ -89,7 +89,10 @@ namespace EntropyCheckers.Presentation
             {
                 fontSize = 16,
                 fontStyle = FontStyle.Bold,
-                alignment = TextAnchor.MiddleCenter
+                alignment = TextAnchor.MiddleCenter,
+                normal = { textColor = Color.white },
+                hover = { textColor = Color.white },
+                active = { textColor = Color.white }
             };
 
             selectedButtonStyle = new GUIStyle(buttonStyle);
