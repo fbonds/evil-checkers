@@ -56,6 +56,7 @@ Every 5 turns, the outermost ring of the board becomes **hazardous**. Pieces on 
 
 ## Tech Stack
 
+- **Language**: C#
 - **Engine**: [Unity 6](https://unity.com/) (6000.3.5f1)
 - **Rendering**: Universal Render Pipeline (URP)
 - **Graphics**: 2D sprites and tilemaps
