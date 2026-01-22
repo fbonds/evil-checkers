@@ -20,7 +20,6 @@ namespace EntropyCheckers.Presentation
         private PieceRenderer pieceRenderer;
         private bool isShowing;
         private Piece promotingPiece;
-        private PromotionChoice? selectedChoice;
         private Piece selectedDefector;
         private List<Piece> defectorCandidates;
         private bool selectingDefector;
@@ -53,7 +52,6 @@ namespace EntropyCheckers.Presentation
         {
             promotingPiece = piece;
             isShowing = true;
-            selectedChoice = null;
             selectedDefector = null;
             selectingDefector = false;
             defectorCandidates = gameManager.GetValidDefectorCandidates();
@@ -63,7 +61,6 @@ namespace EntropyCheckers.Presentation
         {
             isShowing = false;
             promotingPiece = null;
-            selectedChoice = null;
             selectedDefector = null;
             selectingDefector = false;
         }
@@ -151,7 +148,6 @@ namespace EntropyCheckers.Presentation
             GUI.backgroundColor = wraithColor;
             if (GUILayout.Button("\n WRAITH KING \n", buttonStyle, GUILayout.Height(60)))
             {
-                selectedChoice = PromotionChoice.WraithKing;
                 gameManager.SubmitPromotion(PromotionChoice.WraithKing);
             }
             GUILayout.Label("Unlimited diagonal movement\nDies after 3 turns", descriptionStyle);
@@ -164,7 +160,6 @@ namespace EntropyCheckers.Presentation
             {
                 if (defectorCandidates.Count > 0)
                 {
-                    selectedChoice = PromotionChoice.CorruptedKing;
                     selectingDefector = true;
                 }
                 else
@@ -222,7 +217,6 @@ namespace EntropyCheckers.Presentation
             if (GUILayout.Button("Cancel", buttonStyle, GUILayout.Height(35)))
             {
                 selectingDefector = false;
-                selectedChoice = null;
             }
 
             GUI.backgroundColor = Color.white;
