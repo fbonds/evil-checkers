@@ -92,16 +92,18 @@ namespace EntropyCheckers.Presentation
             gameManager = new GameManager();
             
             boardRenderer.Initialize(gameManager.Board);
+            
+            SetupCamera();
+            
+            // Start game BEFORE initializing piece renderer so pieces exist
+            gameManager.StartGame();
+            
             pieceRenderer.Initialize(gameManager.Board, boardRenderer);
             inputHandler.Initialize(gameManager, boardRenderer, pieceRenderer);
             gameUI.Initialize(gameManager);
             promotionDialog.Initialize(gameManager, pieceRenderer);
             aiPlayer.Initialize(gameManager, pieceRenderer);
             aiPlayer.CurrentDifficulty = aiDifficulty;
-            
-            SetupCamera();
-            
-            gameManager.StartGame();
             
             Debug.Log("Entropy Checkers initialized!");
             Debug.Log($"Black pieces: {gameManager.Board.CountPieces(Player.Black)}");

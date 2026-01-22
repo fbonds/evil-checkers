@@ -113,8 +113,8 @@ namespace EntropyCheckers.Presentation
             GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), Texture2D.whiteTexture);
             GUI.color = Color.white;
 
-            float panelWidth = 450;
-            float panelHeight = Mathf.Min(550, Screen.height - 40);
+            float panelWidth = 400;
+            float panelHeight = Mathf.Min(480, Screen.height - 20);
             float panelX = (Screen.width - panelWidth) / 2;
             float panelY = (Screen.height - panelHeight) / 2;
 
@@ -131,15 +131,12 @@ namespace EntropyCheckers.Presentation
             GUILayout.Label("SELECT DIFFICULTY", new GUIStyle(subtitleStyle) { fontStyle = FontStyle.Bold });
             GUILayout.Space(10);
 
-            DrawDifficultyButton(Difficulty.Easy, "EASY", "AI often makes mistakes");
-            GUILayout.Space(5);
-            DrawDifficultyButton(Difficulty.Medium, "MEDIUM", "AI plays reasonably well");
-            GUILayout.Space(5);
-            DrawDifficultyButton(Difficulty.Hard, "HARD", "AI plays strategically");
-            GUILayout.Space(5);
-            DrawDifficultyButton(Difficulty.Master, "MASTER", "AI plays optimally");
+            DrawDifficultyButton(Difficulty.Easy, "EASY");
+            DrawDifficultyButton(Difficulty.Medium, "MEDIUM");
+            DrawDifficultyButton(Difficulty.Hard, "HARD");
+            DrawDifficultyButton(Difficulty.Master, "MASTER");
 
-            GUILayout.Space(20);
+            GUILayout.Space(15);
 
             // Start/Resume button
             GUI.backgroundColor = new Color(0.3f, 0.7f, 0.3f);
@@ -147,7 +144,7 @@ namespace EntropyCheckers.Presentation
                 ? "START GAME" 
                 : "RESUME GAME";
             
-            if (GUILayout.Button(startButtonText, buttonStyle, GUILayout.Height(50)))
+            if (GUILayout.Button(startButtonText, buttonStyle, GUILayout.Height(45)))
             {
                 if (gameBootstrap != null)
                 {
@@ -191,7 +188,7 @@ namespace EntropyCheckers.Presentation
             GUILayout.EndArea();
         }
 
-        private void DrawDifficultyButton(Difficulty difficulty, string label, string description)
+        private void DrawDifficultyButton(Difficulty difficulty, string label)
         {
             bool isSelected = selectedDifficulty == difficulty;
             var style = isSelected ? selectedButtonStyle : buttonStyle;
@@ -200,12 +197,10 @@ namespace EntropyCheckers.Presentation
                 ? new Color(0.4f, 0.4f, 0.6f) 
                 : new Color(0.3f, 0.3f, 0.4f);
 
-            if (GUILayout.Button(label, style, GUILayout.Height(40)))
+            if (GUILayout.Button(label, style, GUILayout.Height(35)))
             {
                 selectedDifficulty = difficulty;
             }
-
-            GUILayout.Label(description, descriptionStyle);
             GUI.backgroundColor = Color.white;
         }
     }
