@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using EntropyCheckers.Core;
 using EntropyCheckers.Game;
 
@@ -53,12 +54,15 @@ namespace EntropyCheckers.Presentation
                 return;
             }
 
-            if (Input.GetMouseButtonDown(0))
+            var mouse = Mouse.current;
+            if (mouse == null) return;
+
+            if (mouse.leftButton.wasPressedThisFrame)
             {
                 HandleClick();
             }
 
-            if (Input.GetMouseButtonDown(1))
+            if (mouse.rightButton.wasPressedThisFrame)
             {
                 ClearSelection();
             }
@@ -66,7 +70,7 @@ namespace EntropyCheckers.Presentation
 
         private void HandleClick()
         {
-            Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             Vector2Int boardPos = boardRenderer.WorldToBoard(mouseWorldPos);
 
             if (!IsValidBoardPosition(boardPos)) return;

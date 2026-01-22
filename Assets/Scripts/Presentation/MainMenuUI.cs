@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using EntropyCheckers.AI;
 
 namespace EntropyCheckers.Presentation
@@ -32,7 +33,7 @@ namespace EntropyCheckers.Presentation
         private void Update()
         {
             // Press Escape to toggle menu
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
             {
                 if (isMenuVisible)
                 {
