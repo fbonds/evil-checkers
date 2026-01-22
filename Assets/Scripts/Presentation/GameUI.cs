@@ -250,7 +250,7 @@ namespace EntropyCheckers.Presentation
             // Play Again button
             if (GUILayout.Button("Play Again", buttonStyle, GUILayout.Height(40)))
             {
-                var bootstrap = FindObjectOfType<GameBootstrap>();
+                var bootstrap = FindFirstObjectByType<GameBootstrap>();
                 if (bootstrap != null)
                 {
                     bootstrap.ResetGame();

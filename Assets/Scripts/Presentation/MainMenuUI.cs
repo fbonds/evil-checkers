@@ -23,7 +23,7 @@ namespace EntropyCheckers.Presentation
 
         private void Start()
         {
-            gameBootstrap = FindObjectOfType<GameBootstrap>();
+            gameBootstrap = FindFirstObjectByType<GameBootstrap>();
             initialized = true;
             
             if (showMenuOnStart)
