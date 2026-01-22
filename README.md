@@ -2,7 +2,7 @@
 
 > *The board is not your friend.*
 
-Entropy Checkers is a strategic board game that takes the classic game of checkers and transforms it into a battle of **Environmental Attrition**. While traditional checkers provides a static battlefield, Entropy Checkers features an actively hostile board that forces engagement, punishes hesitation, and guarantees decisive conclusions.
+A Unity 6 implementation of a strategic board game that takes classic checkers and transforms it into a battle of **Environmental Attrition**. Play against an AI opponent on a battlefield that actively works against both players—forcing engagement, punishing hesitation, and guaranteeing decisive conclusions.
 
 ## Core Philosophy
 
@@ -56,9 +56,15 @@ Every 5 turns, the outermost ring of the board becomes **hazardous**. Pieces on 
 
 ## Tech Stack
 
-- **Engine**: Unity 6 (6000.3.5f1)
+- **Engine**: [Unity 6](https://unity.com/) (6000.3.5f1)
 - **Rendering**: Universal Render Pipeline (URP)
-- **Platform**: 2D
+- **Graphics**: 2D sprites and tilemaps
+- **Input**: Unity Input System
+
+### Requirements
+
+- Unity 6 (6000.3.5f1 or later)
+- Git for cloning the repository
 
 ## License
 
